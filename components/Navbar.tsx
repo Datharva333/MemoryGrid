@@ -12,7 +12,10 @@ export default function Navbar() {
   return (
     <nav className="fixed top-0 z-50 w-full border-b border-gray-800 bg-[#0D1117]/80 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-        <Link href="/" className="text-2xl font-bold">
+        <Link
+          href="/"
+          className="text-2xl font-bold tracking-tight"
+        >
           Memory<span className="text-blue-400">Grid</span>
         </Link>
 
@@ -21,7 +24,7 @@ export default function Navbar() {
             <Link
               key={link.name}
               href={link.href}
-              className="text-gray-300 transition hover:text-blue-400"
+              className="text-sm text-gray-400 transition hover:text-blue-400"
             >
               {link.name}
             </Link>
