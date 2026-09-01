@@ -11,13 +11,13 @@ const links = [
 
 export default function Navbar() {
   return (
-    <nav className="fixed top-0 z-50 w-full border-b border-gray-800 bg-[#0D1117]/90 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-        <Link href="/" className="text-xl font-bold tracking-tight">
+    <nav className="fixed top-0 z-50 w-full border-b border-gray-800 bg-[#0D1117]/95 backdrop-blur-md">
+      <div className="mx-auto flex h-16 max-w-7xl items-center gap-6 px-6">
+        <Link href="/" className="shrink-0 text-xl font-bold tracking-tight">
           Memory<span className="text-blue-400">Grid</span>
         </Link>
 
-        <div className="hidden gap-6 md:flex">
+        <div className="ml-auto hidden items-center gap-6 md:flex">
           {links.map((link) => (
             <Link
               key={link.name}
@@ -28,6 +28,13 @@ export default function Navbar() {
             </Link>
           ))}
         </div>
+
+        <Link
+          href="/simulators"
+          className="ml-auto rounded-lg border border-gray-700 px-3 py-2 text-xs text-gray-300 transition hover:border-gray-500 md:hidden"
+        >
+          Simulator
+        </Link>
       </div>
     </nav>
   );
