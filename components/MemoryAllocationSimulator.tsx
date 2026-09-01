@@ -32,6 +32,8 @@ export default function MemoryAllocationSimulator() {
     "Memory initialized with 1024 KB.",
   ]);
 
+  const [isSimulating, setIsSimulating] = useState(false);
+
   const usedMemory = useMemo(
     () => getUsedMemory(blocks),
     [blocks]
@@ -60,6 +62,15 @@ export default function MemoryAllocationSimulator() {
   }
 
   function handleAllocate() {
+  if (isSimulating) return;
+
+  setIsSimulating(true);
+
+  addLog(
+    `Searching for ${requestSize} KB using ${strategy.replace("-", " ")}...`
+  );
+
+  setTimeout(() => {
     const result = allocateMemory(
       blocks,
       requestSize,
@@ -73,7 +84,10 @@ export default function MemoryAllocationSimulator() {
     if (result.success) {
       setNextProcessId((id) => id + 1);
     }
-  }
+
+    setIsSimulating(false);
+  }, 500);
+}
 
   function handleFree(processId: number) {
     const result = freeMemory(
@@ -209,7 +223,7 @@ export default function MemoryAllocationSimulator() {
               onClick={handleAllocate}
               className="w-full rounded-lg bg-blue-500 px-5 py-3 font-medium transition hover:bg-blue-600"
             >
-              Allocate Memory
+             { isSimulating? "Simulating..." : "Allocate Memory"}
             </button>
           </div>
 
