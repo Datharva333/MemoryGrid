@@ -1,23 +1,37 @@
+import Link from "next/link";
+
 export default function Hero() {
   return (
-    <section className="flex min-h-screen flex-col items-center justify-center px-6 text-center">
-      <h1 className="text-6xl font-bold tracking-tight md:text-8xl">
-        Memory<span className="text-blue-400">Grid</span>
-      </h1>
+    <section className="mx-auto flex min-h-[88vh] max-w-7xl flex-col justify-center px-6 pt-20">
+      <div className="max-w-4xl">
+        <p className="mb-5 text-sm font-medium uppercase tracking-[0.28em] text-blue-400">
+          Computer Memory, Visualized
+        </p>
 
-      <p className="mt-8 max-w-3xl text-lg text-gray-400 md:text-xl">
-        Explore the evolution of computer memory through interactive
-        simulations, historical timelines, and hands-on experimentation.
-      </p>
+        <h1 className="text-5xl font-bold tracking-tight text-white sm:text-6xl md:text-8xl">
+          Understand memory by seeing it work.
+        </h1>
 
-      <div className="mt-12 flex flex-wrap justify-center gap-4">
-        <button className="rounded-xl bg-blue-500 px-8 py-3 transition hover:bg-blue-600">
-          Start Exploring
-        </button>
+        <p className="mt-7 max-w-2xl text-lg leading-8 text-gray-400">
+          MemoryGrid is a compact interactive project for exploring the evolution
+          of computer memory and experimenting with dynamic memory allocation.
+        </p>
 
-        <button className="rounded-xl border border-gray-700 px-8 py-3 transition hover:border-blue-400">
-          View Timeline
-        </button>
+        <div className="mt-10 flex flex-wrap gap-3">
+          <Link
+            href="/simulators"
+            className="rounded-lg bg-blue-500 px-6 py-3 font-medium text-white transition hover:bg-blue-600"
+          >
+            Open Simulator
+          </Link>
+
+          <Link
+            href="/timeline"
+            className="rounded-lg border border-gray-700 px-6 py-3 font-medium text-gray-200 transition hover:border-gray-500"
+          >
+            View Timeline
+          </Link>
+        </div>
       </div>
     </section>
   );
