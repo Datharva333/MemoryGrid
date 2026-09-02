@@ -1,133 +1,211 @@
-const timeline = [
+"use client";
+
+import { useState } from "react";
+
+const eras = [
   {
-    year: "1940s",
-    name: "Early Electronic Memory",
+    period: "1940s",
+    title: "The Beginning of Electronic Memory",
     description:
-      "Early computers experimented with technologies such as delay lines, Williams tubes, and other methods for storing binary information.",
-    category: "Early Memory",
+      "Early electronic computers experimented with several ways of storing binary information. Memory was expensive, physically large, and fundamentally different from the semiconductor memory used today.",
+    technology: "Vacuum tubes, delay lines, early magnetic storage",
+    significance:
+      "The first generations of electronic computers established the need for fast, addressable memory.",
   },
   {
-    year: "1950s",
-    name: "Magnetic Core Memory",
+    period: "1950s",
+    title: "Magnetic Core Memory",
     description:
-      "Magnetic core memory became an important form of main memory, storing bits using the magnetic state of small ferrite cores.",
-    category: "Magnetic Memory",
+      "Magnetic core memory became one of the dominant forms of main memory. Tiny magnetic rings stored individual bits and could retain information without continuous power.",
+    technology: "Magnetic core memory",
+    significance:
+      "Core memory provided reliable random-access storage for many early computers.",
   },
   {
-    year: "1960s",
-    name: "Semiconductor Memory",
+    period: "1960s",
+    title: "The Semiconductor Era Begins",
     description:
-      "Semiconductor technology began replacing earlier magnetic technologies and established the foundation for modern electronic memory.",
-    category: "Semiconductor",
+      "Integrated circuits began changing computer hardware. Semiconductor memory research opened the path toward smaller, faster and increasingly affordable memory systems.",
+    technology: "Early semiconductor memory",
+    significance:
+      "Memory began moving away from large electromechanical and magnetic technologies toward solid-state electronics.",
   },
   {
-    year: "1970s",
-    name: "DRAM",
+    period: "1970s",
+    title: "DRAM Changes Main Memory",
     description:
-      "Dynamic RAM became an important technology for dense, relatively inexpensive main memory.",
-    category: "RAM",
+      "Dynamic random-access memory made it possible to store bits using very small transistor-and-capacitor structures. DRAM rapidly became an important technology for computer main memory.",
+    technology: "DRAM",
+    significance:
+      "Higher density and lower cost made semiconductor main memory increasingly practical.",
   },
   {
-    year: "1980s",
-    name: "SRAM",
+    period: "1980s",
+    title: "SRAM, DRAM and Personal Computers",
     description:
-      "Static RAM became widely important for high-speed memory applications, particularly cache memory.",
-    category: "RAM",
+      "Memory technology continued to improve as personal computers became widespread. Different types of RAM began taking specialized roles inside increasingly complex systems.",
+    technology: "SRAM, DRAM, cache memory",
+    significance:
+      "The memory hierarchy became increasingly important for balancing speed, capacity and cost.",
   },
   {
-    year: "1990s",
-    name: "SDRAM",
+    period: "1990s",
+    title: "Synchronous Memory",
     description:
-      "Synchronous DRAM synchronized memory operations with the system clock, improving predictable memory transfers.",
-    category: "DRAM",
+      "Synchronous DRAM coordinated memory operations with the system clock, improving the ability of memory to keep up with increasingly fast processors.",
+    technology: "SDRAM",
+    significance:
+      "Memory interfaces became more tightly synchronized with processor and system architecture.",
   },
   {
-    year: "2000s",
-    name: "DDR",
+    period: "2000s",
+    title: "The DDR Generation",
     description:
-      "Double Data Rate memory increased transfer rates by transferring data on both edges of the clock signal.",
-    category: "DDR",
+      "Double Data Rate memory technologies increased effective transfer rates by transferring data on both edges of the clock signal.",
+    technology: "DDR, DDR2, DDR3",
+    significance:
+      "Memory bandwidth increased substantially while the basic DRAM architecture continued to evolve.",
   },
   {
-    year: "2003",
-    name: "DDR2",
+    period: "2010s",
+    title: "High Bandwidth and Flash",
     description:
-      "DDR2 increased memory transfer rates while improving the efficiency of the memory interface.",
-    category: "DDR",
+      "Modern systems increasingly combined multiple memory technologies. DDR4 became common while NAND flash transformed persistent storage.",
+    technology: "DDR4, NAND Flash, HBM",
+    significance:
+      "The distinction between memory technologies became increasingly tied to performance, power and workload requirements.",
   },
   {
-    year: "2007",
-    name: "DDR3",
+    period: "2020s",
+    title: "Memory for Massive Computing",
     description:
-      "DDR3 continued the progression toward higher bandwidth and improved power efficiency.",
-    category: "DDR",
-  },
-  {
-    year: "2014",
-    name: "DDR4",
-    description:
-      "DDR4 increased bandwidth and density while reducing operating voltage compared with earlier generations.",
-    category: "DDR",
-  },
-  {
-    year: "2020s",
-    name: "DDR5",
-    description:
-      "DDR5 represents a newer generation of mainstream system memory with substantially increased bandwidth and density.",
-    category: "DDR",
-  },
-  {
-    year: "Modern",
-    name: "High Bandwidth Memory",
-    description:
-      "HBM uses vertically stacked memory dies and a very wide interface to provide high memory bandwidth for demanding workloads.",
-    category: "High Bandwidth",
+      "Modern processors, GPUs and AI accelerators require enormous memory bandwidth. DDR5 and high-bandwidth memory technologies continue pushing the limits of capacity and throughput.",
+    technology: "DDR5, HBM, advanced DRAM",
+    significance:
+      "Memory bandwidth has become a critical factor in modern computing and artificial intelligence.",
   },
 ];
 
 export default function TimelinePage() {
+  const [selectedEra, setSelectedEra] = useState(eras[0]);
+
   return (
     <main className="min-h-screen bg-[#0D1117] px-6 pb-24 pt-32 text-[#E6EDF3]">
-      <div className="mx-auto max-w-5xl">
-        <div className="mb-16">
-          <p className="mb-3 text-sm uppercase tracking-[0.3em] text-blue-400">
-            Memory Evolution
+      <div className="mx-auto max-w-7xl">
+
+        <div className="mb-16 max-w-4xl">
+          <p className="text-sm uppercase tracking-[0.3em] text-blue-400">
+            History of Computer Memory
           </p>
 
-          <h1 className="text-5xl font-bold tracking-tight md:text-7xl">
-            The Memory Timeline
+          <h1 className="mt-4 text-5xl font-bold tracking-tight md:text-7xl">
+            Memory Through Time
           </h1>
 
-          <p className="mt-6 max-w-3xl text-lg leading-8 text-gray-400">
-            Explore how computer memory evolved from early experimental
-            technologies into the high-bandwidth memory systems used by modern
-            computers.
+          <p className="mt-6 text-lg leading-8 text-gray-400">
+            Explore how computer memory evolved from early electronic
+            machines to the high-bandwidth systems powering modern
+            computing.
           </p>
         </div>
 
-        <div className="relative border-l border-gray-800 pl-8">
-          {timeline.map((item) => (
-            <article key={`${item.year}-${item.name}`} className="relative mb-12">
-              <div className="absolute -left-[41px] top-1 h-4 w-4 rounded-full border-4 border-[#0D1117] bg-blue-400" />
 
-              <p className="text-sm font-medium text-blue-400">
-                {item.year}
-              </p>
+        {/* Timeline */}
 
-              <h2 className="mt-2 text-2xl font-semibold">
-                {item.name}
-              </h2>
+        <div className="relative mb-16">
 
-              <p className="mt-3 max-w-3xl leading-7 text-gray-400">
-                {item.description}
-              </p>
+          <div className="absolute left-0 right-0 top-1/2 hidden h-px bg-gray-800 lg:block" />
 
-              <span className="mt-4 inline-block rounded-full border border-gray-800 px-3 py-1 text-xs text-gray-500">
-                {item.category}
-              </span>
-            </article>
-          ))}
+          <div className="relative grid gap-4 sm:grid-cols-2 lg:grid-cols-9">
+
+            {eras.map((era) => {
+
+              const selected =
+                selectedEra.period === era.period;
+
+              return (
+                <button
+                  key={era.period}
+                  onClick={() => setSelectedEra(era)}
+                  className={`relative rounded-xl border p-4 text-left transition-all duration-200 lg:text-center ${
+                    selected
+                      ? "border-blue-400 bg-blue-400/10"
+                      : "border-gray-800 bg-[#11161D] hover:border-gray-600"
+                  }`}
+                >
+                  <span
+                    className={`text-sm font-semibold ${
+                      selected
+                        ? "text-blue-400"
+                        : "text-gray-500"
+                    }`}
+                  >
+                    {era.period}
+                  </span>
+
+                  <span className="mt-2 block text-xs leading-5 text-gray-400">
+                    {era.technology}
+                  </span>
+                </button>
+              );
+            })}
+
+          </div>
         </div>
+
+
+        {/* Selected era */}
+
+        <section className="grid gap-8 lg:grid-cols-[1.5fr_1fr]">
+
+          <div className="rounded-2xl border border-gray-800 bg-[#11161D] p-8 md:p-10">
+
+            <p className="text-sm font-medium text-blue-400">
+              {selectedEra.period}
+            </p>
+
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight md:text-4xl">
+              {selectedEra.title}
+            </h2>
+
+            <p className="mt-6 text-base leading-8 text-gray-400">
+              {selectedEra.description}
+            </p>
+
+          </div>
+
+
+          <div className="space-y-4">
+
+            <div className="rounded-2xl border border-gray-800 bg-[#11161D] p-6">
+
+              <p className="text-xs uppercase tracking-wider text-gray-600">
+                Technology
+              </p>
+
+              <p className="mt-3 text-lg font-medium">
+                {selectedEra.technology}
+              </p>
+
+            </div>
+
+
+            <div className="rounded-2xl border border-gray-800 bg-[#11161D] p-6">
+
+              <p className="text-xs uppercase tracking-wider text-gray-600">
+                Why It Matters
+              </p>
+
+              <p className="mt-3 leading-7 text-gray-400">
+                {selectedEra.significance}
+              </p>
+
+            </div>
+
+          </div>
+
+        </section>
+
       </div>
     </main>
   );
