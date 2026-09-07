@@ -29,12 +29,20 @@ export default function Navbar() {
           ))}
         </div>
 
-        <Link
-          href="/simulators"
-          className="ml-auto rounded-lg border border-gray-700 px-3 py-2 text-xs text-gray-300 transition hover:border-gray-500 md:hidden"
-        >
-          Simulator
-        </Link>
+        <div className="ml-auto flex items-center gap-2 md:hidden">
+          <Link
+            href="/timeline"
+            className="rounded-lg border border-gray-800 px-3 py-2 text-xs text-gray-400 transition hover:border-gray-600 hover:text-white"
+          >
+            Timeline
+          </Link>
+          <Link
+            href="/simulators"
+            className="rounded-lg border border-gray-700 px-3 py-2 text-xs text-gray-200 transition hover:border-gray-500"
+          >
+            Simulator
+          </Link>
+        </div>
       </div>
     </nav>
   );

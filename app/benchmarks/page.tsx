@@ -92,6 +92,7 @@ export default function BenchmarksPage() {
                 <th className="px-5 py-4 font-medium">Utilization</th>
                 <th className="px-5 py-4 font-medium">Fragmentation</th>
                 <th className="px-5 py-4 font-medium">Largest free block</th>
+                <th className="px-5 py-4 font-medium">Successful allocs</th>
               </tr>
             </thead>
             <tbody>
@@ -103,6 +104,7 @@ export default function BenchmarksPage() {
                   <td className="px-5 py-4">{result.utilization}%</td>
                   <td className="px-5 py-4 text-blue-400">{result.fragmentation}%</td>
                   <td className="px-5 py-4">{result.largestFree} KB</td>
+                  <td className="px-5 py-4">{result.successes}</td>
                 </tr>
               ))}
             </tbody>

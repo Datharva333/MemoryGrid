@@ -76,14 +76,12 @@ export default function MemoryAllocationSimulator() {
     setLogs(["Memory reset to 1024 KB."]);
   }
 
-  function handleRandomWorkload() {
+  function handleFragmentationDemo() {
     let currentBlocks = createInitialMemory(MEMORY_SIZE);
     let currentProcessId = 1;
-    const sizes = [64, 96, 128, 160, 192, 256];
     const newLogs: string[] = [];
 
-    for (let i = 0; i < 6; i++) {
-      const size = sizes[Math.floor(Math.random() * sizes.length)];
+    for (const size of [180, 300, 120, 160]) {
       const result = allocateMemory(
         currentBlocks,
         size,
@@ -99,9 +97,18 @@ export default function MemoryAllocationSimulator() {
       }
     }
 
+    for (const processId of [2, 4]) {
+      const result = freeMemory(currentBlocks, processId);
+      currentBlocks = result.blocks;
+      newLogs.push(result.message);
+    }
+
     setBlocks(currentBlocks);
     setNextProcessId(currentProcessId);
-    setLogs(["Random workload generated.", ...newLogs].slice(0, 8));
+    setLogs([
+      "Fragmentation demo loaded. Try allocating another block now.",
+      ...newLogs.reverse(),
+    ].slice(0, 8));
   }
 
   return (
@@ -157,10 +164,10 @@ export default function MemoryAllocationSimulator() {
         <div className="mt-6 flex flex-wrap gap-3">
           <button
             type="button"
-            onClick={handleRandomWorkload}
+            onClick={handleFragmentationDemo}
             className="rounded-lg border border-gray-700 px-5 py-2 text-sm transition hover:border-blue-400"
           >
-            Random Workload
+            Load Fragmentation Demo
           </button>
           <button
             type="button"

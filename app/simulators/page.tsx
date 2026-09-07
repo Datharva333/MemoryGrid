@@ -21,6 +21,23 @@ export default function SimulatorsPage() {
           </p>
         </div>
 
+        <div className="mb-8 grid gap-3 sm:grid-cols-3">
+          {[
+            ["1", "Choose", "Select First Fit, Best Fit, or Worst Fit."],
+            ["2", "Allocate", "Enter a block size and allocate a process."],
+            ["3", "Free", "Release processes to create holes and observe fragmentation."],
+          ].map(([step, title, text]) => (
+            <div
+              key={step}
+              className="rounded-xl border border-gray-800 bg-[#11161D] p-4"
+            >
+              <p className="text-xs font-medium text-blue-400">STEP {step}</p>
+              <p className="mt-2 font-medium text-white">{title}</p>
+              <p className="mt-1 text-sm leading-6 text-gray-500">{text}</p>
+            </div>
+          ))}
+        </div>
+
         <MemoryAllocationSimulator />
 
       </div>
