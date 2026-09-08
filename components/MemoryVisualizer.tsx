@@ -26,10 +26,10 @@ export default function MemoryVisualizer({
             <div
               key={`${block.id}-${block.start}`}
               style={{ width: `${width}%` }}
-              className={`relative flex min-w-0 items-center justify-center border-r border-[#0D1117] text-xs transition-[width] duration-200 ${
+              className={`relative flex min-w-0 items-center justify-center border-r border-[#0D1117] text-xs transition-[width,background-color] duration-300 ${
                 allocated
-                  ? "bg-blue-500/80 text-white"
-                  : "bg-gray-800 text-gray-400"
+                  ? "bg-gradient-to-b from-blue-400/90 to-blue-600/80 text-white"
+                  : "bg-slate-800/80 text-slate-400"
               }`}
               title={`${allocated ? `P${block.processId}` : "FREE"} — ${block.size} KB`}
             >

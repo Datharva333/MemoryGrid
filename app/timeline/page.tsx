@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 const eras = [
   {
@@ -87,125 +87,97 @@ const eras = [
 ];
 
 export default function TimelinePage() {
-  const [selectedEra, setSelectedEra] = useState(eras[0]);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const selectedEra = eras[selectedIndex];
+  const progress = useMemo(() => ((selectedIndex + 1) / eras.length) * 100, [selectedIndex]);
+
+  function move(direction: -1 | 1) {
+    setSelectedIndex((current) => Math.min(eras.length - 1, Math.max(0, current + direction)));
+  }
 
   return (
-    <main className="min-h-screen bg-[#0D1117] px-6 pb-24 pt-32 text-[#E6EDF3]">
+    <main className="page-grid min-h-screen px-6 pb-24 pt-32 text-[#E6EDF3]">
       <div className="mx-auto max-w-7xl">
-
-        <div className="mb-16 max-w-4xl">
-          <p className="text-sm uppercase tracking-[0.3em] text-blue-400">
-            History of Computer Memory
-          </p>
-
-          <h1 className="mt-4 text-5xl font-bold tracking-tight md:text-7xl">
-            Memory Through Time
-          </h1>
-
-          <p className="mt-6 text-lg leading-8 text-gray-400">
-            Explore how computer memory evolved from early electronic
-            machines to the high-bandwidth systems powering modern
-            computing.
+        <div className="mb-14 max-w-4xl">
+          <p className="text-sm uppercase tracking-[0.3em] text-blue-400">History of Computer Memory</p>
+          <h1 className="mt-4 text-5xl font-bold tracking-tight md:text-7xl">Memory Through Time</h1>
+          <p className="mt-6 text-lg leading-8 text-slate-400">
+            Select an era to see how memory technology changed from room-sized early systems to modern high-bandwidth memory.
           </p>
         </div>
 
+        <div className="mb-6 flex items-center justify-between text-xs text-slate-500">
+          <span>{selectedEra.period}</span>
+          <span>{selectedIndex + 1} / {eras.length}</span>
+        </div>
+        <div className="mb-10 h-1 overflow-hidden rounded-full bg-slate-800">
+          <div className="h-full rounded-full bg-blue-400 transition-[width] duration-300" style={{ width: `${progress}%` }} />
+        </div>
 
-        {/* Timeline */}
-
-        <div className="relative mb-16">
-
-          <div className="absolute left-0 right-0 top-1/2 hidden h-px bg-gray-800 lg:block" />
-
-          <div className="relative grid gap-4 sm:grid-cols-2 lg:grid-cols-9">
-
-            {eras.map((era) => {
-
-              const selected =
-                selectedEra.period === era.period;
-
+        <div className="relative mb-12 overflow-x-auto pb-2">
+          <div className="relative flex min-w-max gap-3 lg:min-w-0 lg:grid lg:grid-cols-9">
+            {eras.map((era, index) => {
+              const selected = selectedIndex === index;
               return (
                 <button
                   key={era.period}
-                  onClick={() => setSelectedEra(era)}
-                  className={`relative rounded-xl border p-4 text-left transition-all duration-200 lg:text-center ${
+                  type="button"
+                  onClick={() => setSelectedIndex(index)}
+                  className={`w-32 rounded-xl border p-4 text-left transition-all duration-200 lg:w-auto lg:text-center ${
                     selected
-                      ? "border-blue-400 bg-blue-400/10"
-                      : "border-gray-800 bg-[#11161D] hover:border-gray-600"
+                      ? "border-blue-400/70 bg-blue-400/10 text-white"
+                      : "border-slate-800 bg-[#101720]/85 text-slate-400 hover:border-slate-600"
                   }`}
                 >
-                  <span
-                    className={`text-sm font-semibold ${
-                      selected
-                        ? "text-blue-400"
-                        : "text-gray-500"
-                    }`}
-                  >
+                  <span className={`text-sm font-semibold ${selected ? "text-blue-300" : "text-slate-500"}`}>
                     {era.period}
                   </span>
-
-                  <span className="mt-2 block text-xs leading-5 text-gray-400">
-                    {era.technology}
-                  </span>
+                  <span className="mt-2 block text-xs leading-5">{era.technology}</span>
                 </button>
               );
             })}
-
           </div>
         </div>
 
+        <section className="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
+          <div className="glass-panel rounded-3xl p-8 md:p-10">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <p className="text-sm font-medium text-blue-300">{selectedEra.period}</p>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => move(-1)}
+                  disabled={selectedIndex === 0}
+                  className="rounded-lg border border-slate-700 px-3 py-2 text-sm text-slate-300 transition hover:border-slate-500 disabled:cursor-not-allowed disabled:opacity-30"
+                >
+                  ← Previous
+                </button>
+                <button
+                  type="button"
+                  onClick={() => move(1)}
+                  disabled={selectedIndex === eras.length - 1}
+                  className="rounded-lg border border-slate-700 px-3 py-2 text-sm text-slate-300 transition hover:border-slate-500 disabled:cursor-not-allowed disabled:opacity-30"
+                >
+                  Next →
+                </button>
+              </div>
+            </div>
 
-        {/* Selected era */}
-
-        <section className="grid gap-8 lg:grid-cols-[1.5fr_1fr]">
-
-          <div className="rounded-2xl border border-gray-800 bg-[#11161D] p-8 md:p-10">
-
-            <p className="text-sm font-medium text-blue-400">
-              {selectedEra.period}
-            </p>
-
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight md:text-4xl">
-              {selectedEra.title}
-            </h2>
-
-            <p className="mt-6 text-base leading-8 text-gray-400">
-              {selectedEra.description}
-            </p>
-
+            <h2 className="mt-5 text-3xl font-semibold tracking-tight md:text-4xl">{selectedEra.title}</h2>
+            <p className="mt-6 text-base leading-8 text-slate-400">{selectedEra.description}</p>
           </div>
-
 
           <div className="space-y-4">
-
-            <div className="rounded-2xl border border-gray-800 bg-[#11161D] p-6">
-
-              <p className="text-xs uppercase tracking-wider text-gray-600">
-                Technology
-              </p>
-
-              <p className="mt-3 text-lg font-medium">
-                {selectedEra.technology}
-              </p>
-
+            <div className="soft-card rounded-2xl border border-slate-800 bg-[#101720]/85 p-6">
+              <p className="text-xs uppercase tracking-wider text-slate-600">Technology</p>
+              <p className="mt-3 text-lg font-medium text-white">{selectedEra.technology}</p>
             </div>
-
-
-            <div className="rounded-2xl border border-gray-800 bg-[#11161D] p-6">
-
-              <p className="text-xs uppercase tracking-wider text-gray-600">
-                Why It Matters
-              </p>
-
-              <p className="mt-3 leading-7 text-gray-400">
-                {selectedEra.significance}
-              </p>
-
+            <div className="soft-card rounded-2xl border border-slate-800 bg-[#101720]/85 p-6">
+              <p className="text-xs uppercase tracking-wider text-slate-600">Why it matters</p>
+              <p className="mt-3 leading-7 text-slate-400">{selectedEra.significance}</p>
             </div>
-
           </div>
-
         </section>
-
       </div>
     </main>
   );

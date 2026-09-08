@@ -1,13 +1,27 @@
 @import "tailwindcss";
 
+:root {
+  --bg: #0a0f16;
+  --panel: #101720;
+  --panel-strong: #131c27;
+  --border: #1f2a37;
+  --text: #e7edf5;
+  --muted: #8792a2;
+  --accent: #60a5fa;
+}
+
 html {
   scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
-  background: #0d1117;
-  color: #e6edf3;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 15% -10%, rgba(59, 130, 246, 0.14), transparent 30%),
+    radial-gradient(circle at 85% 10%, rgba(14, 165, 233, 0.08), transparent 28%),
+    var(--bg);
+  color: var(--text);
   font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -27,7 +41,68 @@ button {
   cursor: pointer;
 }
 
+button:focus-visible,
+a:focus-visible,
+select:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
 ::selection {
   background: #2563eb;
   color: white;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0f16;
+}
+
+::-webkit-scrollbar-thumb {
+  border: 2px solid #0a0f16;
+  border-radius: 999px;
+  background: #263244;
+}
+
+.page-grid {
+  background-image:
+    linear-gradient(rgba(148, 163, 184, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.035) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.glass-panel {
+  background: linear-gradient(180deg, rgba(19, 28, 39, 0.9), rgba(13, 19, 27, 0.9));
+  border: 1px solid rgba(71, 85, 105, 0.45);
+}
+
+.soft-card {
+  transition: transform 180ms ease, border-color 180ms ease, background-color 180ms ease;
+}
+
+@media (hover: hover) {
+  .soft-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(96, 165, 250, 0.45);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
