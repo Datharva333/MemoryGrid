@@ -7,7 +7,7 @@ export default function AboutPage() {
 
         <div className="mt-10 space-y-6 text-lg leading-8 text-gray-400">
           <p>
-            MemoryGrid is a small educational side project for visualizing how computer memory evolved and how dynamic memory allocation works.
+            MemoryGrid is an educational project for visualizing how computer memory evolved and how dynamic memory allocation works.
           </p>
           <p>
             Its main interactive feature is a heap simulator implementing First Fit, Best Fit, and Worst Fit allocation with deallocation, block coalescing, utilization, and external-fragmentation measurements.

@@ -106,3 +106,244 @@ textarea:focus-visible {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Lightweight depth and motion layer: CSS-only, no WebGL dependency. */
+.perspective-stage {
+  perspective: 1100px;
+}
+
+.depth-panel {
+  position: relative;
+  isolation: isolate;
+  transform-style: preserve-3d;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+  box-shadow:
+    0 30px 70px rgba(0, 0, 0, 0.32),
+    0 1px 0 rgba(255, 255, 255, 0.04) inset;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .depth-panel:hover {
+    border-color: rgba(96, 165, 250, 0.38);
+    box-shadow:
+      0 38px 90px rgba(0, 0, 0, 0.38),
+      0 0 55px rgba(59, 130, 246, 0.08),
+      0 1px 0 rgba(255, 255, 255, 0.06) inset;
+  }
+}
+
+.metric-depth {
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16), 0 1px 0 rgba(255, 255, 255, 0.025) inset;
+}
+
+.ram-scene {
+  position: relative;
+  width: min(100%, 360px);
+  height: 126px;
+  perspective: 900px;
+  transform-style: preserve-3d;
+}
+
+.ram-board {
+  position: absolute;
+  inset: 18px 18px 20px;
+  overflow: hidden;
+  border: 1px solid rgba(96, 165, 250, 0.32);
+  border-radius: 16px;
+  background:
+    linear-gradient(135deg, rgba(30, 64, 175, 0.16), transparent 48%),
+    linear-gradient(180deg, rgba(17, 35, 54, 0.98), rgba(8, 20, 31, 0.98));
+  transform: rotateX(58deg) rotateZ(-8deg) translateZ(22px);
+  transform-style: preserve-3d;
+  box-shadow:
+    -16px 24px 34px rgba(0, 0, 0, 0.34),
+    0 0 30px rgba(59, 130, 246, 0.08) inset;
+  animation: ram-float 5s ease-in-out infinite;
+}
+
+.ram-shadow {
+  position: absolute;
+  left: 16%;
+  right: 8%;
+  bottom: 3px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.42);
+  filter: blur(13px);
+  transform: rotate(-5deg);
+  animation: ram-shadow-pulse 5s ease-in-out infinite;
+}
+
+.ram-chip {
+  position: absolute;
+  top: 25px;
+  width: 17%;
+  height: 44px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 6px;
+  background: linear-gradient(145deg, #182434, #0a111a 62%);
+  box-shadow:
+    0 7px 0 #070c12,
+    0 11px 16px rgba(0, 0, 0, 0.28),
+    0 1px 0 rgba(255, 255, 255, 0.05) inset;
+  transform: translateZ(15px);
+}
+
+.ram-chip span {
+  position: absolute;
+  inset: 7px;
+  border: 1px solid rgba(96, 165, 250, 0.14);
+  border-radius: 3px;
+  background: radial-gradient(circle at 25% 20%, rgba(96, 165, 250, 0.16), transparent 55%);
+}
+
+.ram-chip-1 { left: 7%; }
+.ram-chip-2 { left: 29%; }
+.ram-chip-3 { left: 51%; }
+.ram-chip-4 { left: 73%; }
+
+.ram-pins {
+  position: absolute;
+  right: 6%;
+  bottom: -1px;
+  left: 6%;
+  height: 7px;
+  opacity: 0.78;
+  background: repeating-linear-gradient(90deg, #d5b764 0 7px, transparent 7px 11px);
+  transform: translateZ(4px);
+}
+
+.ram-label {
+  position: absolute;
+  top: 8px;
+  left: 9%;
+  color: rgba(147, 197, 253, 0.7);
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  transform: translateZ(8px);
+}
+
+.ram-led {
+  position: absolute;
+  top: 10px;
+  right: 9%;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #60a5fa;
+  box-shadow: 0 0 14px rgba(96, 165, 250, 0.95);
+  transform: translateZ(18px);
+  animation: ram-led-pulse 2.4s ease-in-out infinite;
+}
+
+.ram-trace {
+  position: absolute;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.5), transparent);
+  opacity: 0.45;
+}
+
+.ram-trace-a {
+  top: 78px;
+  left: 10%;
+  width: 68%;
+}
+
+.ram-trace-b {
+  top: 17px;
+  right: 14%;
+  width: 42%;
+}
+
+@keyframes ram-float {
+  0%, 100% {
+    transform: rotateX(58deg) rotateZ(-8deg) translate3d(0, 0, 22px);
+  }
+  50% {
+    transform: rotateX(55deg) rotateZ(-6deg) translate3d(0, -6px, 28px);
+  }
+}
+
+@keyframes ram-shadow-pulse {
+  0%, 100% {
+    opacity: 0.62;
+    transform: rotate(-5deg) scale(1);
+  }
+  50% {
+    opacity: 0.42;
+    transform: rotate(-5deg) scale(0.92);
+  }
+}
+
+@keyframes ram-led-pulse {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 1; }
+}
+
+@media (max-width: 520px) {
+  .ram-scene {
+    height: 108px;
+  }
+
+  .ram-board {
+    inset: 12px 8px 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ram-board,
+  .ram-shadow,
+  .ram-led {
+    animation: none !important;
+  }
+
+  .depth-panel {
+    transform: none !important;
+  }
+}
+
+.memory-depth-frame {
+  position: relative;
+  box-shadow:
+    0 16px 34px rgba(0, 0, 0, 0.24),
+    0 1px 0 rgba(255, 255, 255, 0.035) inset,
+    0 -8px 22px rgba(0, 0, 0, 0.2) inset;
+}
+
+.memory-depth-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 24%, transparent 72%, rgba(0, 0, 0, 0.16));
+}
+
+.memory-segment {
+  position: relative;
+  overflow: hidden;
+}
+
+.memory-segment::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.09) 48%, transparent 66%);
+  transform: translateX(-120%);
+  transition: transform 520ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .memory-segment:hover::before {
+    transform: translateX(120%);
+  }
+
+  .memory-segment-allocated:hover {
+    filter: brightness(1.12);
+  }
+
+  .memory-segment-free:hover {
+    filter: brightness(1.16);
+  }
+}

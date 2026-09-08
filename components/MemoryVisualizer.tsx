@@ -14,7 +14,7 @@ export default function MemoryVisualizer({
   return (
     <div>
       <div
-        className={`flex w-full overflow-hidden rounded-xl border border-gray-700 bg-[#0D1117] ${
+        className={`memory-depth-frame flex w-full overflow-hidden rounded-xl border border-gray-700 bg-[#0D1117] ${
           compact ? "h-20" : "h-32"
         }`}
       >
@@ -26,18 +26,18 @@ export default function MemoryVisualizer({
             <div
               key={`${block.id}-${block.start}`}
               style={{ width: `${width}%` }}
-              className={`relative flex min-w-0 items-center justify-center border-r border-[#0D1117] text-xs transition-[width,background-color] duration-300 ${
+              className={`memory-segment relative flex min-w-0 items-center justify-center border-r border-[#0D1117] text-xs transition-[width,background-color,filter] duration-300 ${
                 allocated
-                  ? "bg-gradient-to-b from-blue-400/90 to-blue-600/80 text-white"
-                  : "bg-slate-800/80 text-slate-400"
+                  ? "memory-segment-allocated bg-gradient-to-b from-blue-400/90 to-blue-600/80 text-white"
+                  : "memory-segment-free bg-slate-800/80 text-slate-400"
               }`}
               title={`${allocated ? `P${block.processId}` : "FREE"} — ${block.size} KB`}
             >
-              <span className="truncate px-2 font-medium">
+              <span className="relative z-10 truncate px-2 font-medium">
                 {allocated ? `P${block.processId}` : "FREE"}
               </span>
               {!compact && (
-                <span className="absolute bottom-2 hidden opacity-70 sm:block">
+                <span className="absolute bottom-2 z-10 hidden opacity-70 sm:block">
                   {block.size} KB
                 </span>
               )}
