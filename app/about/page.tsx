@@ -10,10 +10,10 @@ export default function AboutPage() {
             MemoryGrid is an educational project for visualizing how computer memory evolved and how dynamic memory allocation works.
           </p>
           <p>
-            Its main interactive feature is a heap simulator implementing First Fit, Best Fit, and Worst Fit allocation with deallocation, block coalescing, utilization, and external-fragmentation measurements.
+            Its main interactive feature is a heap simulator implementing First Fit, Best Fit, and Worst Fit allocation with deallocation, block coalescing, utilization, and external-fragmentation measurements. Three.js scenes turn the heap, hardware and memory timeline into spatial visualizations rather than static diagrams.
           </p>
           <p>
-            The project intentionally stays lightweight: the simulations run in the browser, there is no database or account system, and the interface focuses on quick experimentation rather than feature depth.
+            The project stays browser-first: allocation logic runs locally, 3D scenes are loaded only when needed, and there is no database or account system.
           </p>
         </div>
       </div>

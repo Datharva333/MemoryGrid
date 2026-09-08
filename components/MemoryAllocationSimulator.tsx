@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useMemo, useState } from "react";
 import MemoryVisualizer from "@/components/MemoryVisualizer";
 import {
@@ -15,6 +16,11 @@ import {
 } from "@/lib/memory";
 
 const MEMORY_SIZE = 1024;
+
+const MemoryHeap3D = dynamic(() => import("@/components/three/MemoryHeap3D"), {
+  ssr: false,
+  loading: () => <div className="h-[360px] animate-pulse rounded-2xl bg-slate-900/50 sm:h-[420px]" />,
+});
 
 const strategyDescriptions: Record<Strategy, string> = {
   "first-fit": "Uses the first free block large enough for the request.",
@@ -56,6 +62,7 @@ export default function MemoryAllocationSimulator() {
   const [requestSize, setRequestSize] = useState(128);
   const [nextProcessId, setNextProcessId] = useState(1);
   const [logs, setLogs] = useState<string[]>(["Memory initialized with 1024 KB."]);
+  const [viewMode, setViewMode] = useState<"3d" | "2d">("3d");
 
   const usedMemory = useMemo(() => getUsedMemory(blocks), [blocks]);
   const freeMemoryAmount = useMemo(() => getFreeMemory(blocks), [blocks]);
@@ -199,16 +206,40 @@ export default function MemoryAllocationSimulator() {
       </section>
 
       <section className="glass-panel rounded-2xl p-6">
-        <div className="mb-6 flex items-center justify-between gap-4">
+        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-xl font-semibold">Physical Memory</h2>
-            <p className="mt-1 text-sm text-slate-500">1024 KB simulated heap</p>
+            <p className="mt-1 text-sm text-slate-500">1024 KB simulated heap rendered as spatial memory blocks.</p>
           </div>
-          <span className="rounded-full border border-slate-700 bg-slate-950/40 px-3 py-1 text-xs text-slate-400">
-            {strategy.replace("-", " ").toUpperCase()}
-          </span>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="flex rounded-lg border border-slate-700 bg-slate-950/40 p-1">
+              <button
+                type="button"
+                onClick={() => setViewMode("3d")}
+                className={`rounded-md px-3 py-1.5 text-xs font-medium transition ${viewMode === "3d" ? "bg-blue-500 text-white" : "text-slate-500 hover:text-slate-200"}`}
+              >
+                3D Heap
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewMode("2d")}
+                className={`rounded-md px-3 py-1.5 text-xs font-medium transition ${viewMode === "2d" ? "bg-slate-700 text-white" : "text-slate-500 hover:text-slate-200"}`}
+              >
+                2D Map
+              </button>
+            </div>
+            <span className="rounded-full border border-slate-700 bg-slate-950/40 px-3 py-1 text-xs text-slate-400">
+              {strategy.replace("-", " ").toUpperCase()}
+            </span>
+          </div>
         </div>
-        <MemoryVisualizer blocks={blocks} totalSize={MEMORY_SIZE} />
+
+        {viewMode === "3d" ? (
+          <MemoryHeap3D blocks={blocks} totalSize={MEMORY_SIZE} />
+        ) : (
+          <MemoryVisualizer blocks={blocks} totalSize={MEMORY_SIZE} />
+        )}
       </section>
 
       <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

@@ -8,7 +8,7 @@ export default function Hero() {
         <div className="max-w-4xl">
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-blue-400/20 bg-blue-400/5 px-3 py-1.5 text-xs font-medium text-blue-300">
             <span className="h-1.5 w-1.5 rounded-full bg-blue-400" />
-            Computer memory, visualized
+            Computer memory, spatially visualized
           </div>
 
           <h1 className="text-5xl font-bold tracking-[-0.04em] text-white sm:text-6xl md:text-7xl">
@@ -16,7 +16,7 @@ export default function Hero() {
           </h1>
 
           <p className="mt-7 max-w-2xl text-lg leading-8 text-slate-400">
-            Explore the evolution of computer memory, then experiment with allocation strategies and fragmentation directly in your browser.
+            Explore the evolution of computer memory through real-time 3D scenes, then experiment with allocation strategies and fragmentation directly in your browser.
           </p>
 
           <div className="mt-10 flex flex-wrap gap-3">

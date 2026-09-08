@@ -1,6 +1,6 @@
 # MemoryGrid
 
-MemoryGrid is a lightweight educational side project for exploring the evolution of computer memory and experimenting with dynamic memory allocation.
+MemoryGrid is a lightweight educational project for exploring the evolution of computer memory and experimenting with dynamic memory allocation.
 
 ## Features
 
@@ -49,4 +49,10 @@ Next.js, React, TypeScript, and Tailwind CSS. All simulations run locally in the
 4. Open **Playground** and run the sample `ALLOC` / `FREE` workload.
 5. Open **Benchmarks** to compare the same workload across First Fit, Best Fit, and Worst Fit.
 
-For this side-project scope, these pages are the finished core of MemoryGrid.
+These pages form the finished core of MemoryGrid.
+
+## 3D interface
+
+MemoryGrid uses Three.js through React Three Fiber and Drei for the hardware hero scene, interactive heap visualization, and spatial memory timeline. The original 2D heap view remains available as a lightweight fallback inside the simulator.
+
+Three.js scenes are dynamically loaded on the client and cap device pixel ratio to keep the interface responsive.

@@ -1,6 +1,12 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useMemo, useState } from "react";
+
+const TimelineScene3D = dynamic(() => import("@/components/three/TimelineScene3D"), {
+  ssr: false,
+  loading: () => <div className="h-[380px] animate-pulse rounded-3xl border border-slate-800 bg-slate-900/40 sm:h-[440px]" />,
+});
 
 const eras = [
   {
@@ -104,6 +110,14 @@ export default function TimelinePage() {
           <p className="mt-6 text-lg leading-8 text-slate-400">
             Select an era to see how memory technology changed from room-sized early systems to modern high-bandwidth memory.
           </p>
+        </div>
+
+        <div className="mb-10">
+          <TimelineScene3D
+            periods={eras.map((era) => era.period)}
+            selectedIndex={selectedIndex}
+            onSelect={setSelectedIndex}
+          />
         </div>
 
         <div className="mb-6 flex items-center justify-between text-xs text-slate-500">
