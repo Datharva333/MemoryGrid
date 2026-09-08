@@ -1,11 +1,11 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const TimelineScene3D = dynamic(() => import("@/components/three/TimelineScene3D"), {
   ssr: false,
-  loading: () => <div className="h-[380px] animate-pulse rounded-3xl border border-slate-800 bg-slate-900/40 sm:h-[440px]" />,
+  loading: () => <div className="h-[390px] animate-pulse rounded-3xl border border-slate-800 bg-slate-900/40 sm:h-[460px]" />,
 });
 
 const eras = [
@@ -94,10 +94,27 @@ const eras = [
 
 export default function TimelinePage() {
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [autoTour, setAutoTour] = useState(false);
   const selectedEra = eras[selectedIndex];
   const progress = useMemo(() => ((selectedIndex + 1) / eras.length) * 100, [selectedIndex]);
 
+  useEffect(() => {
+    if (!autoTour) return;
+
+    const timer = window.setInterval(() => {
+      setSelectedIndex((current) => (current + 1) % eras.length);
+    }, 2800);
+
+    return () => window.clearInterval(timer);
+  }, [autoTour]);
+
+  function selectEra(index: number) {
+    setAutoTour(false);
+    setSelectedIndex(index);
+  }
+
   function move(direction: -1 | 1) {
+    setAutoTour(false);
     setSelectedIndex((current) => Math.min(eras.length - 1, Math.max(0, current + direction)));
   }
 
@@ -113,10 +130,24 @@ export default function TimelinePage() {
         </div>
 
         <div className="mb-10">
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+            <p className="text-xs uppercase tracking-[0.2em] text-slate-600">3D evolution path</p>
+            <button
+              type="button"
+              onClick={() => setAutoTour((current) => !current)}
+              className={`rounded-lg border px-3 py-2 text-xs font-medium transition ${
+                autoTour
+                  ? "border-blue-400/60 bg-blue-400/10 text-blue-200"
+                  : "border-slate-700 text-slate-400 hover:border-slate-500 hover:text-white"
+              }`}
+            >
+              {autoTour ? "Pause tour" : "▶ Auto tour"}
+            </button>
+          </div>
           <TimelineScene3D
             periods={eras.map((era) => era.period)}
             selectedIndex={selectedIndex}
-            onSelect={setSelectedIndex}
+            onSelect={selectEra}
           />
         </div>
 
@@ -136,7 +167,7 @@ export default function TimelinePage() {
                 <button
                   key={era.period}
                   type="button"
-                  onClick={() => setSelectedIndex(index)}
+                  onClick={() => selectEra(index)}
                   className={`w-32 rounded-xl border p-4 text-left transition-all duration-200 lg:w-auto lg:text-center ${
                     selected
                       ? "border-blue-400/70 bg-blue-400/10 text-white"

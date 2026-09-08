@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { useMemo, useState } from "react";
 import MemoryVisualizer from "@/components/MemoryVisualizer";
+import RealtimeMemoryGraph, { type MemoryMetricSample } from "@/components/RealtimeMemoryGraph";
 import {
   allocateMemory,
   createInitialMemory,
@@ -19,7 +20,7 @@ const MEMORY_SIZE = 1024;
 
 const MemoryHeap3D = dynamic(() => import("@/components/three/MemoryHeap3D"), {
   ssr: false,
-  loading: () => <div className="h-[360px] animate-pulse rounded-2xl bg-slate-900/50 sm:h-[420px]" />,
+  loading: () => <div className="h-[380px] animate-pulse rounded-2xl bg-slate-900/50 sm:h-[440px]" />,
 });
 
 const strategyDescriptions: Record<Strategy, string> = {
@@ -56,6 +57,17 @@ const presets: Preset[] = [
   },
 ];
 
+function createMetricSample(blocks: MemoryBlock[], step: number): MemoryMetricSample {
+  const used = getUsedMemory(blocks);
+  return {
+    step,
+    used,
+    utilization: Math.round((used / MEMORY_SIZE) * 100),
+    fragmentation: getExternalFragmentation(blocks),
+    largestFree: getLargestFreeBlock(blocks),
+  };
+}
+
 export default function MemoryAllocationSimulator() {
   const [blocks, setBlocks] = useState<MemoryBlock[]>(createInitialMemory(MEMORY_SIZE));
   const [strategy, setStrategy] = useState<Strategy>("first-fit");
@@ -63,6 +75,9 @@ export default function MemoryAllocationSimulator() {
   const [nextProcessId, setNextProcessId] = useState(1);
   const [logs, setLogs] = useState<string[]>(["Memory initialized with 1024 KB."]);
   const [viewMode, setViewMode] = useState<"3d" | "2d">("3d");
+  const [history, setHistory] = useState<MemoryMetricSample[]>([
+    { step: 0, used: 0, utilization: 0, fragmentation: 0, largestFree: MEMORY_SIZE },
+  ]);
 
   const usedMemory = useMemo(() => getUsedMemory(blocks), [blocks]);
   const freeMemoryAmount = useMemo(() => getFreeMemory(blocks), [blocks]);
@@ -73,6 +88,14 @@ export default function MemoryAllocationSimulator() {
 
   function addLog(message: string) {
     setLogs((current) => [message, ...current].slice(0, 8));
+  }
+
+  function commitBlocks(nextBlocks: MemoryBlock[]) {
+    setBlocks(nextBlocks);
+    setHistory((current) => {
+      const nextStep = (current[current.length - 1]?.step ?? 0) + 1;
+      return [...current, createMetricSample(nextBlocks, nextStep)].slice(-28);
+    });
   }
 
   function handleAllocate() {
@@ -87,7 +110,7 @@ export default function MemoryAllocationSimulator() {
     }
 
     const result = allocateMemory(blocks, requestSize, strategy, nextProcessId);
-    setBlocks(result.blocks);
+    commitBlocks(result.blocks);
     addLog(result.message);
 
     if (result.success) setNextProcessId((id) => id + 1);
@@ -95,25 +118,31 @@ export default function MemoryAllocationSimulator() {
 
   function handleFree(processId: number) {
     const result = freeMemory(blocks, processId);
-    setBlocks(result.blocks);
+    commitBlocks(result.blocks);
     addLog(result.message);
   }
 
   function handleReset() {
-    setBlocks(createInitialMemory(MEMORY_SIZE));
+    const initial = createInitialMemory(MEMORY_SIZE);
+    setBlocks(initial);
     setNextProcessId(1);
+    setHistory([createMetricSample(initial, 0)]);
     setLogs(["Memory reset to 1024 KB."]);
   }
 
   function loadPreset(preset: Preset) {
     let currentBlocks = createInitialMemory(MEMORY_SIZE);
     let currentProcessId = 1;
+    let step = 0;
     const newLogs: string[] = [];
+    const presetHistory: MemoryMetricSample[] = [createMetricSample(currentBlocks, step)];
 
     for (const size of preset.allocations) {
       const result = allocateMemory(currentBlocks, size, strategy, currentProcessId);
       currentBlocks = result.blocks;
       newLogs.push(result.message);
+      step += 1;
+      presetHistory.push(createMetricSample(currentBlocks, step));
       if (result.success) currentProcessId += 1;
     }
 
@@ -121,10 +150,13 @@ export default function MemoryAllocationSimulator() {
       const result = freeMemory(currentBlocks, processId);
       currentBlocks = result.blocks;
       newLogs.push(result.message);
+      step += 1;
+      presetHistory.push(createMetricSample(currentBlocks, step));
     }
 
     setBlocks(currentBlocks);
     setNextProcessId(currentProcessId);
+    setHistory(presetHistory.slice(-28));
     setLogs([`${preset.name} preset loaded. Try another allocation.`, ...newLogs.reverse()].slice(0, 8));
   }
 
@@ -248,6 +280,8 @@ export default function MemoryAllocationSimulator() {
         <StatCard label="Largest Hole" value={`${largestFreeBlock} KB`} detail="Largest continuous free block" />
         <StatCard label="Fragmentation" value={`${fragmentation}%`} detail="External fragmentation" accent />
       </section>
+
+      <RealtimeMemoryGraph history={history} totalSize={MEMORY_SIZE} />
 
       <section className="glass-panel rounded-2xl p-6">
         <div className="flex items-center justify-between gap-4">
